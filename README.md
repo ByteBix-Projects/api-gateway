@@ -1,11 +1,24 @@
 # API Gateway
 
-The API Gateway is the central entry point for all client requests in the ride-booking system, handling authentication, rate limiting, and routing to appropriate microservices. It ensures secure and efficient communication.
+The API Gateway is the central entry point for all client requests in the ride-booking system, handling authentication, rate limiting, and routing to microservices.
 
 ## Key Features
-- **Authentication and Authorization**: Validates user and driver requests before routing.
-- **Rate Limiting**: Prevents system overload by controlling request frequency.
-- **Request Routing**: Directs requests to relevant microservices based on functionality.
+- Authentication and Authorization
+- Rate Limiting
+- Request Routing
+
+## Recommended Tech Stack
+- **Runtime**: Node.js for handling concurrent connections, paired with NGINX for frontend proxying and SSL encryption [1].
+- **Framework**: Express.js for building RESTful APIs [1][3].
+- **Load Balancing**: HAProxy for distributing traffic across microservices [1][4].
+- **Authentication**: JWT or OAuth for securing endpoints.
+
+## System Design Structure
+- **Entry Layer**: NGINX handles incoming requests, manages SSL, and forwards to Node.js runtime.
+- **Authentication Module**: Validates tokens before routing.
+- **Routing Logic**: Directs requests to microservices based on endpoint paths.
+- **Rate Limiting**: Prevents overload using custom middleware or HAProxy.
+- **Logging**: Tracks requests for monitoring with ELK stack [1][4].
 
 ## Architecture Diagram
 ```mermaid
@@ -21,11 +34,11 @@ AP[Admin Panel] -->|Sends Requests| AG
 ```
 
 ## Interaction with Other Services
-The API Gateway is the intermediary between client applications and backend microservices, facilitating seamless interaction:
-- **Passenger App, Driver App, Admin Panel**: All client requests are received by the API Gateway, which authenticates and routes them to the appropriate service.
-- **Ride Service**: Receives ride booking and management requests routed from client apps.
-- **Location Service**: Handles location update requests and queries for tracking and matching.
-- **Ride Matching Service**: Gets requests for driver-passenger matching via the API Gateway.
-- **Payment Service**: Processes payment-related requests routed from client interactions.
-- **Notification Service**: Manages notification requests triggered by client actions or system updates.
+The API Gateway facilitates communication between clients and backend:
+- **Passenger App, Driver App, Admin Panel**: Receives all client requests for routing.
+- **Ride Service**: Routes ride booking and management requests.
+- **Location Service**: Handles location update requests.
+- **Ride Matching Service**: Directs matching requests.
+- **Payment Service**: Processes payment requests.
+- **Notification Service**: Manages notification triggers.
 
